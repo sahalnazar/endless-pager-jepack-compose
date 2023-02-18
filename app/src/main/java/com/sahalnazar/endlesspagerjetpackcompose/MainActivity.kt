@@ -51,17 +51,20 @@ fun EndlessHorizontalPager(
     items: List<String>,
     itemClicked: (String) -> Unit
 ) {
-    val pagerState = rememberPagerState()
+    val pageCount = Int.MAX_VALUE
+    val pagerState = rememberPagerState(
+        initialPage = pageCount / 2
+    )
 
     HorizontalPager(
         modifier = Modifier
             .background(Color(0xff469597))
             .size(200.dp)
             .clickable {
-                val clickedItem = items[pagerState.settledPage]
+                val clickedItem = items[pagerState.settledPage % items.size]
                 itemClicked(clickedItem)
             },
-        pageCount = items.size,
+        pageCount = pageCount,
         state = pagerState
     ) { page ->
         Box(
@@ -69,7 +72,7 @@ fun EndlessHorizontalPager(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = items[page],
+                text = items[page % items.size],
                 style = MaterialTheme.typography.h1
             )
         }
